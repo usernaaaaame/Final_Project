@@ -1,2 +1,1 @@
-import hi
-import 테스트 중입니다.
+import hi get 마지막 테스트

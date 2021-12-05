@@ -1,1 +1,1 @@
-import 이제 연동은 끝인건가요
+import

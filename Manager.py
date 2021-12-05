@@ -1,1 +1,1 @@
-import hi get 마지막 테스트
+import 이제 연동은 끝인건가요

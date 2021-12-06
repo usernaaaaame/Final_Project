@@ -37,7 +37,7 @@ class Client ():
         id_to_search = int(input('확인 하고 싶은 사역의 번호를 적어주세요 : '))
         while (id_to_search<1 or id_to_search>len_wsts):
             id_to_search = int(input('입력 에러! 범위에 맞는 숫자 값을 입력해주세요 : '))
-        print(pd.read_excel('WorkCycle.xlsx',sheet_name=str(self.ws_names_to_show[id_to_search-1]),usecols=[0,2]))
+        print(pd.read_excel('WorkCycle.xlsx',sheet_name=str(self.ws_names_to_show[id_to_search-1]),usecols=[0,1]))
         self.Main_Page()
 
     def Request(self):

@@ -5,11 +5,11 @@ import openpyxl
 
 class Client ():
     def __init__(self):
-        self.wb = openpyxl.load_workbook(r'WorkCycle.xlsx')
+        self.wb = openpyxl.load_workbook(r'WorkCycle2.xlsx')
         self.ws_names = self.wb.sheetnames
         self.ws_names_to_show = list()
         for i in range(len(self.ws_names)):
-            if (i % 3) == 0 :
+            if (i % 2) == 0 :
                 self.ws_names_to_show.append(self.ws_names[i])
         self.Main_Page()
 
@@ -39,12 +39,19 @@ class Client ():
         while (id_to_search<1 or id_to_search>len_wsts):
             id_to_search = int(input('입력 에러! 범위에 맞는 숫자 값을 입력해주세요 : '))
         print(pd.read_excel('WorkCycle.xlsx',sheet_name=str(self.ws_names_to_show[id_to_search-1]),usecols=[0,1]))
-        self.Main_Page()
+        #self.Main_Page()
 
     def Request(self):
         df = pd.read_excel('WorkCycle.xlsx', header=None, index_col=None)
         print(df)
-        self.Main_Page()
+        #self.Main_Page()
+
+    def Find_First_Index(self,list1 : list, b):
+        idx=0
+        for i in range(len(list1)):
+            if list1[i]==b:
+                idx = i
+                return idx
 
 def main():
     Client()

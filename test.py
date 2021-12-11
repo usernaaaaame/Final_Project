@@ -8,14 +8,27 @@ ws_names_to_show = list()
 for i in range(len(ws_names)):
     if (i % 2) == 0:
         ws_names_to_show.append(ws_names[i])
-sheet = wb[ws_names_to_show[1]]
+sheet = wb[ws_names_to_show[0]]
+sheet_to_save = wb[ws_names_to_show[0]+"(수정요청)"]
 print(sheet)
-gap=list()
+Squad_list = list()  # 해당 시트에서의 분대 리스트 저장
+for i in sheet.rows:
+    Squad_list.append(i[0].value)
+print(Squad_list)
+result=list()
+b=None
 for i in sheet.columns:
-    gap.append(i[3].value)
+    result.append(i[6].value)
+gap=list()
+for i in range(len(result)):
+    if(result[i]==b):
+        gap.append(i)
+print(result)
 print(gap)
-wb.create_sheet('testsheet')
+print(gap[0])
+sheet_to_save.cell(row=7, column=gap[0]+1).value="test2"
 wb.save('sample.xlsx')
+
 
 # # 열 출력 예시
 # cnt=0

@@ -11,21 +11,21 @@ class Client ():
         for i in range(len(self.ws_names)):
             if (i % 2) == 0 :
                 self.ws_names_to_show.append(self.ws_names[i])
-        self.is_squad_selected = False
-        self.is_sheet_selected = False
         self.Main_Page()
 
 
 
     def Main_Page(self):
-        id_to_task = int(input('하고 싶은 작업을 선택하여 숫자로 입력해 주세요 : 0-종료, 1-예정 사역 확인, 2-사역 면제 쿠폰 사용\n'))
+        self.is_squad_selected = False
+        self.is_sheet_selected = False
+        id_to_task = int(input('하고 싶은 작업을 선택하여 숫자로 입력해 주세요 : 0-종료, 1-예정 사역 확인, 2-사역 면제 요청\n'))
         while (id_to_task!=0 and id_to_task!=1 and id_to_task!=2):
-            id_to_task = int(input('입력 에러! 숫자를 1 또는 2로 입력해 주세요 : 0-종료, 1-예정 사역 확인, 2-사역 면제 쿠폰 사용\n'))
+            id_to_task = int(input('입력 에러! 숫자를 1 또는 2로 입력해 주세요 : 0-종료, 1-예정 사역 확인, 2-사역 면제 요청\n'))
         if id_to_task ==1 :
             self.Confirm()
         elif id_to_task==2 :
             self.Request()
-        else :
+        elif id_to_task==0 :
             return 0
 
 
@@ -92,9 +92,11 @@ class Client ():
                         print(Squad_list[Not_worked_squad_idx_next[i-len(Not_worked_squad_idx)]],end=' - ')
         print()
         print("자신의 분대의 다음 사역이 언제인지 알고 싶으면 소대-분대 형식으로 입력해주세요")
-        self.My_Squad = input("(ex 1소대 1분대-> 1-1, 처음 화면으로 돌아가고 싶으면 0을 입력해주세요)\n").split('-')
+        self.My_Squad = input("(ex 1소대 1분대-> 1-1, 처음 화면으로 돌아가고 싶으면 0을, 사역 면제를 요청하고 싶으면 1을 입력해주세요)\n").split('-')
         if (self.My_Squad[0]=='0'):
             self.Main_Page()
+        elif (len(self.My_Squad)==1 and self.My_Squad[0] == '1'):
+            self.Request()
         elif (int(self.My_Squad[0])<1 or int(self.My_Squad[0])>4 or int(self.My_Squad[1])<1 or int(self.My_Squad[1])>4 or len(self.My_Squad)==1):
             while (int(self.My_Squad[0])<1 or int(self.My_Squad[0])>4 or int(self.My_Squad[1])<1 or int(self.My_Squad[1])>4 or len(self.My_Squad)==1) :
                 self.My_Squad = input("입력 오류. 다시 입력해주세요\n").split('-')
@@ -105,21 +107,21 @@ class Client ():
             self.is_squad_selected= True
 
         if self.Find_Ind_With_Lists(Not_worked_squadlist,self.My_Squad_string,Not_worked_squad_val,None)!=-1:
-            print(self.My_Squad_string+"는 "+ self.ws_names_to_show[self.id_to_search-1]+"에서 다음 "+ str(self.Find_First_Index(Not_worked_squadlist,self.My_Squad_string)+1)+" 번째, ",end='')
+            print(self.My_Squad_string+"는 "+ self.ws_names_to_show[self.id_to_search-1]+"에서 다음 "+ str(self.Find_First_Index(Not_worked_squadlist,self.My_Squad_string)+1)+"번째, ",end='')
             print(str(len(Not_worked_squad_idx)+self.Find_First_Index(Not_worked_squadlist_next,self.My_Squad_string)+1)+"번째의 사역분대입니다.")
         elif (self.Find_Ind_With_Lists(Not_worked_squadlist,self.My_Squad_string,Not_worked_squad_val,None)==-1) and(self.Find_Ind_With_Lists(Not_worked_squadlist_next,self.My_Squad_string,Not_worked_squad_val_next,None)!=-1):
             print(self.My_Squad_string + "는 " + self.ws_names_to_show[self.id_to_search - 1] + "에서 다음 " + str(len(Not_worked_squad_idx) + self.Find_First_Index(Not_worked_squadlist_next,self.My_Squad_string)+1)+ "번째의 사역분대입니다.")
         else :
             print(self.My_Squad_string+"는 "+self.ws_names_to_show[self.id_to_search-1]+"에서 다음 "+str(len(Not_worked_squad_idx)+len(Not_worked_squad_idx_next))+"번 안의 사역분대에는 해당하지 않습니다.")
 
-        next_work = int(input('다음 작업을 선택해주세요 : 0-종료, 1-메인화면, 2-사역 면제 쿠폰 사용 \n'))
+        next_work = int(input('다음 작업을 선택해주세요 : 0-종료, 1-메인화면, 2-사역 면제 요청 \n'))
         while (next_work<0 or next_work>2):
             next_work = int(input('입력 에러! 범위에 맞는 숫자 값을 입력해주세요 \n'))
         if(next_work==1):
             self.Main_Page()
         elif(next_work==2):
             self.Request()
-        else:
+        elif(next_work==0):
             return 0
 
     def Request(self):
@@ -152,7 +154,7 @@ class Client ():
                 self.id_to_search = int(input('입력 에러! 범위에 맞는 숫자 값을 입력해주세요 \n'))
         sheet = self.wb[self.ws_names_to_show[self.id_to_search - 1]]
         self.is_sheet_selected = True
-
+        sheet_to_request= self.wb[self.ws_names_to_show[self.id_to_search - 1]+"(수정요청)"] # 수정요청하는 페이지에 저장하기 위한 변수
         Squad_list = list()  # 해당 시트에서의 분대 리스트 저장
         for i in sheet.rows:
             Squad_list.append(i[0].value)
@@ -160,9 +162,19 @@ class Client ():
         Work_list=list()
         for i in sheet.columns:
             Work_list.append(i[My_squad_idx].value)
-        print(Squad_list)
-        print(Work_list)
 
+        print('면제 사유를 입력해주세요.')
+        reason=input('ex)환경 사역 면제권, 중대 단결 행사에서 받은 면제권\n')
+        sheet_to_request.cell(row=My_squad_idx+1 ,column=self.Find_First_Index(Work_list,None)+1).value=reason
+        print("요청이 전송 되었습니다. 확인까지 시간이 다소 소요될 수 있습니다.")
+        self.wb.save('WorkCycle.xlsx')
+        next_work = int(input('다음 작업을 선택해주세요 : 0-종료, 1-메인화면 \n'))
+        while (next_work < 0 or next_work > 1):
+            next_work = int(input('입력 에러! 범위에 맞는 숫자 값을 입력해주세요 \n'))
+        if (next_work == 1):
+            self.Main_Page()
+        else:
+            return 0
 
     def Find_First_Index(self,list1 : list, val):   #리스트 중 특정 값 갖는 배열의 인덱스 반환
         for i in range(len(list1)):

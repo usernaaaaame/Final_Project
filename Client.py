@@ -1,6 +1,5 @@
-import pandas as pd
 import openpyxl
-#두 번째 코딩
+
 
 
 class Client ():

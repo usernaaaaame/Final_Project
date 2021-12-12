@@ -47,6 +47,9 @@ class Client ():
         for i in sheet.columns:
             which_num.append(i[17].value)
         row_to_search = self.Find_First_Index(which_num, None) #다 끝나지 않은 회차의 열
+        if(row_to_search==-1):
+            print("사역이 모두 돌았습니다. 관리자에게 문의 후 대기하여 주세요")
+            return 0
 
         is_squad_did = list()                           #어떤 분대가 안했는지 값을 저장하기 위한 리스트
         is_squad_did_next = list()              #다음 회차에서 어떤 분대가 안했는지 값 저장 위한 리스트
@@ -114,7 +117,7 @@ class Client ():
             print(self.My_Squad_string+"는 "+self.ws_names_to_show[self.id_to_search-1]+"에서 다음 "+str(len(Not_worked_squad_idx)+len(Not_worked_squad_idx_next))+"번 안의 사역분대에는 해당하지 않습니다.")
 
         next_work = int(input('다음 작업을 선택해주세요 : 0-종료, 1-메인화면, 2-사역 면제 요청 \n'))
-        while (next_work<0 or next_work>2):
+        while (next_work<0 or next_work>2 ):
             next_work = int(input('입력 에러! 범위에 맞는 숫자 값을 입력해주세요 \n'))
         if(next_work==1):
             self.Main_Page()
@@ -161,14 +164,18 @@ class Client ():
         Work_list=list()
         for i in sheet.columns:
             Work_list.append(i[My_squad_idx].value)
-
         print('면제 사유를 입력해주세요.')
-        reason=input('ex)환경 사역 면제권, 중대 단결 행사에서 받은 면제권\n')
-        sheet_to_request.cell(row=My_squad_idx+1 ,column=self.Find_First_Index(Work_list,None)+1).value=reason
+        reason=input('ex)환경 사역 면제권, 중대 단결 행사에서 받은 면제권. 메인으로 돌아가고 싶으면 0을 입력해주세요\n')
+        if (reason=="0"):
+            self.Main_Page()
+        if(self.Find_First_Index(Work_list,None)!=-1):
+            sheet_to_request.cell(row=My_squad_idx+1 ,column=self.Find_First_Index(Work_list,None)+1).value=reason
+        else:
+            sheet_to_request.cell(row=My_squad_idx + 1,column=len(Work_list) + 1).value = reason
         print("요청이 전송 되었습니다. 확인까지 시간이 다소 소요될 수 있습니다.")
         self.wb.save('WorkCycle.xlsx')
         next_work = int(input('다음 작업을 선택해주세요 : 0-종료, 1-메인화면 \n'))
-        while (next_work < 0 or next_work > 1):
+        while (next_work < 0 or next_work > 1 ):
             next_work = int(input('입력 에러! 범위에 맞는 숫자 값을 입력해주세요 \n'))
         if (next_work == 1):
             self.Main_Page()
@@ -179,7 +186,7 @@ class Client ():
         for i in range(len(list1)):
             if list1[i]==val:
                 return i
-
+        return -1
 
     def Find_Ind_With_Lists(self, list1: list , val1, list2: list, val2 ): #리스트 들과 값 매치되는 인덱스 반환
         for i in range(len(list1)):

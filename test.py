@@ -65,3 +65,8 @@ print(result)
 #         idx_list.append(i)
 # print(idx_list)
 # print(len(idx_list))
+
+# self.Squad_list = list()
+# for j in sheet.rows:
+#     self.Squad_list.append(i[0].value)
+# print(self.Squad_list)

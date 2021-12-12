@@ -19,8 +19,8 @@ class Client ():
         self.is_squad_selected = False
         self.is_sheet_selected = False
         id_to_task = int(input('하고 싶은 작업을 선택하여 숫자로 입력해 주세요 : 0-종료, 1-예정 사역 확인, 2-사역 면제 요청\n'))
-        while (id_to_task!=0 and id_to_task!=1 and id_to_task!=2):
-            id_to_task = int(input('입력 에러! 숫자를 1 또는 2로 입력해 주세요 : 0-종료, 1-예정 사역 확인, 2-사역 면제 요청\n'))
+        while (id_to_task < 0 or id_to_task>2):
+            id_to_task = int(input('입력 에러! 0에서 2사이의 값을 입력해 주세요 : 0-종료, 1-예정 사역 확인, 2-사역 면제 요청\n'))
         if id_to_task ==1 :
             self.Confirm()
         elif id_to_task==2 :

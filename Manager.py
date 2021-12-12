@@ -54,8 +54,8 @@ class Manager ():
         elif id_to_task == 0:
             return 0
 
-    # def Check_Cycle(self):
-    #
+    def Check_Cycle(self):
+
     # def Check_Request(self):
 
     def Add_manager(self):

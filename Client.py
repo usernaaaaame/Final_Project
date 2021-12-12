@@ -22,14 +22,14 @@ class Client ():
         while (id_to_task < 0 or id_to_task>2):
             id_to_task = int(input('입력 에러! 0에서 2사이의 값을 입력해 주세요 : 0-종료, 1-예정 사역 확인, 2-사역 면제 요청\n'))
         if id_to_task ==1 :
-            self.Confirm()
+            self.Check()
         elif id_to_task==2 :
             self.Request()
         elif id_to_task==0 :
             return 0
 
 
-    def Confirm(self):
+    def Check(self):
         print("사역 목록 입니다 : ", end='')
         len_wsts=len(self.ws_names_to_show)
         for i in range(len_wsts):

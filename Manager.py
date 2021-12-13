@@ -135,7 +135,6 @@ class Manager ():
             for j in range (16):
                 if(self.is_Val_in_list(lists2[i],j)==False and self.is_Val_in_list(asked_squad_idx_list,j+1)==False):
                     asked_squad_idx_list.append(j+1)
-        # asked_squad_list =
         asked_squad_idx_list.sort()
         print(asked_squad_idx_list)
 

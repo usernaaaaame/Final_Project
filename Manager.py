@@ -165,8 +165,8 @@ class Manager ():
 
     def Apply_Request(self):
         if(self.is_squad_selected==False):
-            for i in range (len(self.asked_squad_idx_list)):
-                if(i<len(self.asked_squad_idx_list)-1):
+            for i in range (len(self.asked_squad_list)):
+                if(i<len(self.asked_squad_list)-1):
                     print(self.Squad_Request_list[i][0], end ='/')
                 else:
                     print(self.Squad_Request_list[i][0], end=' ')
@@ -212,6 +212,10 @@ class Manager ():
         else:
             self.sheet_work.cell(row=change_squad_idx + 1, column=len(worklist) + 1).value = content
             self.sheet_request.cell(row=change_squad_idx + 1, column=len(worklist) + 1).value = None
+        ##회차 종료 여부 수정하는 코드
+        ## show idx 수정
+        #Squad_Request_list수정
+        #수정 후에 같은 분대가 면제권이 없을 경우 self.asked_squad_list 바꾸고, is squad select false로 바꾸기
 
         self.wb.save('WorkCycle.xlsx')
         print("수정이 완료되었습니다.")

@@ -41,14 +41,23 @@ import openpyxl
 # del gap[-1]
 
 #find fir ind 테스트
-result=list()
-list1=['o','a',None,'a','a']
-b='c'
+# result=list()
+# list1=['o','a',None,'a','a']
+# b='c'
+# for i in range(len(list1)):
+#     if list1[i]==b:
+#         result.append(i)
+#         print(i)
+# print(result)
+
+#find fir not none 테스트
+cnt=0
+list1=[None,None,None,'a','a']
 for i in range(len(list1)):
-    if list1[i]==b:
-        result.append(i)
-        print(i)
-print(result)
+    if list1[i]==None:
+        cnt=cnt+1
+print(cnt)
+
 
 # find idx Lists 테스트
 # list1 = ["가","나","다","나"]

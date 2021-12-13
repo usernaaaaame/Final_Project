@@ -120,7 +120,8 @@ class Manager ():
         self.Squadlist=list()
         for i in self.sheet_work.rows:
             self.Squadlist.append(i[0].value)
-        print("다음번 3회차 까지의 면제 요청 분대 리스트")
+
+        print(self.ws_names_to_show[self.id_to_search - 1]+"에서 다음번 최대 3회차 까지의 면제 요청 분대 리스트와 요청 내용입니다")
         asked_squad_list =list()
         asked_squad_idx_list=list()
         lists=[0 for i in range(3)]
@@ -136,9 +137,28 @@ class Manager ():
                 if(self.is_Val_in_list(lists2[i],j)==False and self.is_Val_in_list(asked_squad_idx_list,j+1)==False):
                     asked_squad_idx_list.append(j+1)
         asked_squad_idx_list.sort()
-        print(asked_squad_idx_list)
+        for i in asked_squad_idx_list:                      #면제 요청한 분대의 이름 저장
+            asked_squad_list.append(self.Squadlist[i])
+
+        for i in asked_squad_idx_list:
+            cnt = 0
+            print(self.Squadlist[i]+" - ", end='')
+            for j in self.sheet_request.columns:
+                cnt= cnt+1
+                if(cnt>self.showIdx and cnt<=self.showIdx+3 and j[i].value!=None):
+                    print(j[i].value,end=' ')
+            print()
+
+        next_work = int(input('다음 작업을 선택해주세요 : 1-메인화면, 2-면제요청 사이클 반영 \n'))
+        while (next_work < 1 or next_work > 2):
+            next_work = int(input('입력 에러! 범위에 맞는 숫자 값을 입력해주세요 \n'))
+        if (next_work == 1):
+            self.Main_Page()
+        else:
+            self.Apply_Request()
 
 
+    # def Apply_Request(self):
 
 
     def Add_manager(self):
@@ -171,6 +191,13 @@ class Manager ():
             if list1[i] == val:
                 return i
         return -1
+
+    def Find_First_Not_None(self,list1: list):
+        cnt=0
+        for i in range(len(list1)):
+            if list1[i]==None:
+                cnt=cnt+1
+        return cnt
 
     def Find_Inds_list(self, list1 : list, val):        #리스트 중 특정 값 갖는 배열의 인덱스를 리스트로 반환
         idx_list=list()

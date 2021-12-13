@@ -44,6 +44,7 @@ class Manager ():
 
     def Main_Page(self):
         self.is_sheet_selected = False
+        self.is_squad_selected = False
         id_to_task = int(input('하고 싶은 작업을 선택하여 숫자로 입력해 주세요 : 0-종료, 1-예정 사역 확인, 2-면제 요청 확인, 3-관리자 추가\n'))
         while (id_to_task <0 or id_to_task >3):
             id_to_task = int(input('입력 에러! 0에서 3사이의 값을 입력해 주세요 : 0-종료, 1-예정 사역 확인, 2-면제 요청 확인, 3-관리자 추가\n'))
@@ -122,8 +123,8 @@ class Manager ():
             self.Squadlist.append(i[0].value)
 
         print(self.ws_names_to_show[self.id_to_search - 1]+"에서 다음번 최대 3회차 까지의 면제 요청 분대 리스트와 요청 내용입니다")
-        asked_squad_list =list()
-        asked_squad_idx_list=list()
+        self.asked_squad_list =list()
+        self.asked_squad_idx_list=list()
         lists=[0 for i in range(3)]
         lists2=[0 for i in range(3)]
         temp=list()
@@ -134,21 +135,25 @@ class Manager ():
             if (self.Find_First_Index(lists[i][1:], None) != -1):
                 lists2[i] = self.Find_Inds_list(lists[i][1:],None)
             for j in range (16):
-                if(self.is_Val_in_list(lists2[i],j)==False and self.is_Val_in_list(asked_squad_idx_list,j+1)==False):
-                    asked_squad_idx_list.append(j+1)
-        asked_squad_idx_list.sort()
-        for i in asked_squad_idx_list:                      #면제 요청한 분대의 이름 저장
-            asked_squad_list.append(self.Squadlist[i])
+                if(self.is_Val_in_list(lists2[i],j)==False and self.is_Val_in_list(self.asked_squad_idx_list,j+1)==False):
+                    self.asked_squad_idx_list.append(j+1)
+        self.asked_squad_idx_list.sort()
+        for i in self.asked_squad_idx_list:                      #면제 요청한 분대의 이름 저장
+            self.asked_squad_list.append(self.Squadlist[i])
 
-        for i in asked_squad_idx_list:
+        self.Squad_Request_list=[[] for i in range(len(self.asked_squad_idx_list))] #분대와 면제 신청 내용 모두 저장하는 리스트
+        cnt_to_SRL=0                #Squad request list를 위한 변수
+        for i in self.asked_squad_idx_list:
             cnt = 0
+            self.Squad_Request_list[cnt_to_SRL].append(self.Squadlist[i])
             print(self.Squadlist[i]+" - ", end='')
             for j in self.sheet_request.columns:
                 cnt= cnt+1
                 if(cnt>self.showIdx and cnt<=self.showIdx+3 and j[i].value!=None):
+                    self.Squad_Request_list[cnt_to_SRL].append(j[i].value)
                     print(j[i].value,end=' ')
+            cnt_to_SRL = cnt_to_SRL + 1
             print()
-
         next_work = int(input('다음 작업을 선택해주세요 : 1-메인화면, 2-면제요청 사이클 반영 \n'))
         while (next_work < 1 or next_work > 2):
             next_work = int(input('입력 에러! 범위에 맞는 숫자 값을 입력해주세요 \n'))
@@ -158,7 +163,73 @@ class Manager ():
             self.Apply_Request()
 
 
-    # def Apply_Request(self):
+    def Apply_Request(self):
+        if(self.is_squad_selected==False):
+            for i in range (len(self.asked_squad_idx_list)):
+                if(i<len(self.asked_squad_idx_list)-1):
+                    print(self.Squad_Request_list[i][0], end ='/')
+                else:
+                    print(self.Squad_Request_list[i][0], end=' ')
+            print("중 요청을 적용시킬 분대를 소대-분대 형식으로 입력해주세요")
+            Squad_to_Apply = input("(ex 1소대 1분대-> 1-1, 처음 화면으로 돌아가고 싶으면 0을 입력해주세요)\n").split('-')
+            self.Squad_to_Apply_string = None
+            if (Squad_to_Apply[0] == '0'):
+                self.Main_Page()
+            elif (int(Squad_to_Apply[0]) < 1 or int(Squad_to_Apply[0]) > 4 or int(Squad_to_Apply[1]) < 1 or int(Squad_to_Apply[1]) > 4 or len(Squad_to_Apply) == 1):
+                while (int(Squad_to_Apply[0]) < 1 or int(Squad_to_Apply[0]) > 4 or int(Squad_to_Apply[1]) < 1 or int(Squad_to_Apply[1]) > 4 or len(Squad_to_Apply) == 1):
+                    Squad_to_Apply = input("입력 오류. 다시 입력해주세요\n").split('-')
+                self.Squad_to_Apply_string = Squad_to_Apply[0] + '소대 ' + Squad_to_Apply[1] + '분대'
+            else:
+                self.Squad_to_Apply_string = Squad_to_Apply[0] + '소대 ' + Squad_to_Apply[1] + '분대'
+
+            while (self.Find_First_Index(self.asked_squad_list, self.Squad_to_Apply_string)== -1):
+                Squad_to_Apply = input("입력 오류 : 면제를 요청한 분대들 중에서 선택해주세요. 처음 화면으로 돌아가고 싶으면 0을 입력해주세요)\n").split('-')
+                if (Squad_to_Apply[0] == '0'):
+                    self.Main_Page()
+                elif (int(Squad_to_Apply[0]) < 1 or int(Squad_to_Apply[0]) > 4 or int(Squad_to_Apply[1]) < 1 or int(
+                        Squad_to_Apply[1]) > 4 or len(Squad_to_Apply) == 1):
+                    while (int(Squad_to_Apply[0]) < 1 or int(Squad_to_Apply[0]) > 4 or int(Squad_to_Apply[1]) < 1 or int(
+                            Squad_to_Apply[1]) > 4 or len(Squad_to_Apply) == 1):
+                        Squad_to_Apply = input("입력 오류. 다시 입력해주세요\n").split('-')
+                    Squad_to_Apply_string = Squad_to_Apply[0] + '소대 ' + Squad_to_Apply[1] + '분대'
+                else:
+                    Squad_to_Apply_string = Squad_to_Apply[0] + '소대 ' + Squad_to_Apply[1] + '분대'
+
+        worklist=list()
+        for i in self.sheet_work.columns:
+            worklist.append(i[self.Find_First_Index(self.Squadlist,self.Squad_to_Apply_string)].value)
+        print(self.Squad_Request_list)
+        print(worklist)
+        change_squad_idx=self.Find_First_Index(self.Squadlist,self.Squad_to_Apply_string)
+        change_work_idx=self.Find_First_Index(worklist,None)
+        print('사역 사이클에 어떻게 표시할 지 내용을 입력해주세요.')
+        content = input(' ex) o, 7/4일, OO사역 등등.. 메인으로 돌아가고 싶으면 0을 입력해주세요\n')
+        if (content=="0"):
+            self.Main_Page()
+        if (change_work_idx != -1):
+            self.sheet_work.cell(row=change_squad_idx + 1, column=change_work_idx + 1).value = content
+            self.sheet_request.cell(row=change_squad_idx + 1, column=change_work_idx + 1).value =None
+        else:
+            self.sheet_work.cell(row=change_squad_idx + 1, column=len(worklist) + 1).value = content
+            self.sheet_request.cell(row=change_squad_idx + 1, column=len(worklist) + 1).value = None
+
+        self.wb.save('WorkCycle.xlsx')
+        print("수정이 완료되었습니다.")
+
+
+        next_work = int(input('다음 작업을 선택해주세요 : 0-종료, 1-메인화면, 2-같은 분대 면제권 적용, 3- 다른 분대 면제권 적용 \n'))
+        while (next_work < 0 or next_work > 3):
+            next_work = int(input('입력 에러! 범위에 맞는 숫자 값을 입력해주세요 \n'))
+        if (next_work == 1):
+            self.Main_Page()
+        elif(next_work == 2):
+            self.is_squad_selected=True
+            self.Apply_Request()
+        elif (next_work == 3):
+            self.is_squad_selected=False
+            self.Apply_Request()
+        else:
+            return 0
 
 
     def Add_manager(self):
@@ -192,12 +263,6 @@ class Manager ():
                 return i
         return -1
 
-    def Find_First_Not_None(self,list1: list):
-        cnt=0
-        for i in range(len(list1)):
-            if list1[i]==None:
-                cnt=cnt+1
-        return cnt
 
     def Find_Inds_list(self, list1 : list, val):        #리스트 중 특정 값 갖는 배열의 인덱스를 리스트로 반환
         idx_list=list()

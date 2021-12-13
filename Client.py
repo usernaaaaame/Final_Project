@@ -172,8 +172,8 @@ class Client ():
             sheet_to_request.cell(row=My_squad_idx+1 ,column=self.Find_First_Index(Work_list,None)+1).value=reason
         else:
             sheet_to_request.cell(row=My_squad_idx + 1,column=len(Work_list) + 1).value = reason
-        print("요청이 전송 되었습니다. 확인까지 시간이 다소 소요될 수 있습니다.")
         self.wb.save('WorkCycle.xlsx')
+        print("요청이 전송 되었습니다. 확인까지 시간이 다소 소요될 수 있습니다.")
         next_work = int(input('다음 작업을 선택해주세요 : 0-종료, 1-메인화면 \n'))
         while (next_work < 0 or next_work > 1 ):
             next_work = int(input('입력 에러! 범위에 맞는 숫자 값을 입력해주세요 \n'))

@@ -44,8 +44,7 @@ class Manager ():
             id_to_task = int(input('입력 에러! 0에서 3사이의 값을 입력해 주세요 : 0-종료, 1-예정 사역 확인, 2-면제 요청 확인, 3-관리자 추가\n'))
         if id_to_task ==0:
             print('수고하셨습니다!')
-            self.is_end=True
-            return 0
+            exit()
         elif id_to_task == 1:
             self.Check_Cycle()
         elif id_to_task == 2:
@@ -258,10 +257,16 @@ class Manager ():
                         self.Main_Page()
                 else:
                     self.is_end=True
+                    print('수고하셨습니다!')
+                    exit()
                     return 0
             else:
+                print('수고하셨습니다!')
+                exit()
                 return 0
         else:
+            print('수고하셨습니다!')
+            exit()
             return 0
 
 
@@ -290,12 +295,18 @@ class Manager ():
                 if (next_work == 1):
                     self.Main_Page()
                 else:
-                    self.is_end=True
-                    return 0
+                    print('수고하셨습니다!')
+                    exit()
+
+
             else:
-                return 0
+                print('수고하셨습니다!')
+                exit()
+
         else :
-            return 0
+            print('수고하셨습니다!')
+            exit()
+
 
 
     def Hash_String(self, password : str):

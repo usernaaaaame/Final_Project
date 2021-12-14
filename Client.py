@@ -1,7 +1,5 @@
 import openpyxl
 
-
-
 class Client ():
     def __init__(self):
         self.wb = openpyxl.load_workbook(r'WorkCycle.xlsx')
@@ -23,7 +21,8 @@ class Client ():
         elif id_to_task==2 :
             self.Request()
         elif id_to_task==0 :
-            return 0
+            exit()
+
 
 
     def Check(self):
@@ -122,6 +121,7 @@ class Client ():
         elif(next_work==2):
             self.Request()
         elif(next_work==0):
+            exit()
             return 0
 
     def Request(self):
@@ -178,7 +178,8 @@ class Client ():
         if (next_work == 1):
             self.Main_Page()
         else:
-            return 0
+            exit()
+
 
     def Find_First_Index(self,list1 : list, val):   #리스트 중 특정 값 갖는 배열의 인덱스 반환
         for i in range(len(list1)):

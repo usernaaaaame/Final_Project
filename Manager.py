@@ -272,29 +272,35 @@ class Manager ():
 
 
     def Add_manager(self):
-        print("새로 추가될 관리자가 사용할 비밀번호를 입력해주세요 : ", end=' ')
-        password=input('만약 메인 화면으로 돌아가고 싶다면 main을 입력해주세요\n')
-        password=self.Hash_String(password)
-        if(password=='FAD58DE7366495DB4650CFEFAC2FCD61'):
-            self.Main_Page()
-        while (self.Find_First_Index(self.pass_list,password)!=-1):
-            print('이미 사용하고 있는 비밀번호 입니다. 다른 비밀번호를 입력해주세요.',end=' ')
-            password = self.Hash_String(input('만약 메인 화면으로 돌아가고 싶다면 main을 입력해주세요\n'))
+        if(self.is_end==False):
+            print("새로 추가될 관리자가 사용할 비밀번호를 입력해주세요 : ", end=' ')
+            password=input('만약 메인 화면으로 돌아가고 싶다면 main을 입력해주세요\n')
+            password=self.Hash_String(password)
             if(password=='FAD58DE7366495DB4650CFEFAC2FCD61'):
                 self.Main_Page()
-
-        row_to_input = len(self.pass_list)
-        if ((self.Find_First_Index(self.pass_list,None)!=-1) and (row_to_input >self.Find_First_Index(self.pass_list,None))):
-            row_to_input=self.Find_First_Index(self.pass_list,None)
-        self.passSheet.cell(row=row_to_input+1,column=1).value=password
-        self.wbpass.save('pass.xlsx')
-        print("새로운 관리자로 접속하려면 프로그램 종료 후 다시 실행해주세요!")
-        next_work = int(input('다음 작업을 선택해주세요 : 0-종료, 1-메인화면 \n'))
-        while (next_work < 0 or next_work > 1 ):
-            next_work = int(input('입력 에러! 범위에 맞는 숫자 값을 입력해주세요 \n'))
-        if (next_work == 1):
-            self.Main_Page()
-        else:
+            while (self.is_end==False and self.Find_First_Index(self.pass_list,password)!=-1):
+                print('이미 사용하고 있는 비밀번호 입니다. 다른 비밀번호를 입력해주세요.',end=' ')
+                password = self.Hash_String(input('만약 메인 화면으로 돌아가고 싶다면 main을 입력해주세요\n'))
+                if(password=='FAD58DE7366495DB4650CFEFAC2FCD61'):
+                    self.Main_Page()
+            if(self.is_end==False):
+                row_to_input = len(self.pass_list)
+                if ((self.Find_First_Index(self.pass_list,None)!=-1) and (row_to_input >self.Find_First_Index(self.pass_list,None))):
+                    row_to_input=self.Find_First_Index(self.pass_list,None)
+                self.passSheet.cell(row=row_to_input+1,column=1).value=password
+                self.wbpass.save('pass.xlsx')
+                print("새로운 관리자로 접속하려면 프로그램 종료 후 다시 실행해주세요!")
+                next_work = int(input('다음 작업을 선택해주세요 : 0-종료, 1-메인화면 \n'))
+                while (next_work < 0 or next_work > 1 ):
+                    next_work = int(input('입력 에러! 범위에 맞는 숫자 값을 입력해주세요 \n'))
+                if (next_work == 1):
+                    self.Main_Page()
+                else:
+                    self.is_end=True
+                    return 0
+            else:
+                return 0
+        else :
             return 0
 
 

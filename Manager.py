@@ -206,7 +206,9 @@ class Manager ():
                 change_squad_idx=self.Find_First_Index(self.Squadlist,self.Squad_to_Apply_string)
                 change_work_idx=self.Find_First_Index(worklist,None)
                 print('사역 사이클에 어떻게 표시할 지 내용을 입력해주세요.')
-                content = input(' ex) o, 7/4일, OO사역 등등.. 메인으로 돌아가고 싶으면 main을 입력해주세요\n')
+                content = input(' ex) o, 7/4일, OO사역 등등.. 메인으로 돌아가고 싶으면 main을, 해당 면제권을 없애고 싶으면 none을 입력해주세요\n')
+                if (content=='none'):
+                    content = None
                 if (content=="main"):
                     self.Main_Page()
                 if (change_work_idx != -1):

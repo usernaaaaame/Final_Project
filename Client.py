@@ -12,8 +12,6 @@ class Client ():
                 self.ws_names_to_show.append(self.ws_names[i])
         self.Main_Page()
 
-
-
     def Main_Page(self):
         self.is_squad_selected = False
         self.is_sheet_selected = False

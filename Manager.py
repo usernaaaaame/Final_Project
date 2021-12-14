@@ -16,13 +16,6 @@ class Manager ():
         Hashed_password = self.Hash_String(password)
         self.SecurityCheck(Hashed_password)
 
-    def Hash_String(self, password : str):
-        password = password.encode("UTF-8")
-        MD5=hashlib.md5()
-        MD5.update(password)
-        Enctext=MD5.hexdigest()
-        Enctext=Enctext.upper()
-        return Enctext
 
     def SecurityCheck(self, password : str):
         cnt=1
@@ -270,7 +263,6 @@ class Manager ():
             return 0
 
 
-
     def Add_manager(self):
         if(self.is_end==False):
             print("새로 추가될 관리자가 사용할 비밀번호를 입력해주세요 : ", end=' ')
@@ -303,6 +295,14 @@ class Manager ():
         else :
             return 0
 
+
+    def Hash_String(self, password : str):
+        password = password.encode("UTF-8")
+        MD5=hashlib.md5()
+        MD5.update(password)
+        Enctext=MD5.hexdigest()
+        Enctext=Enctext.upper()
+        return Enctext
 
     def Find_First_Index(self, list1: list, val):  # 리스트 중 특정 값 갖는 배열의 인덱스 반환
         for i in range(len(list1)):

@@ -50,13 +50,12 @@ import openpyxl
 #         print(i)
 # print(result)
 
-#find fir not none 테스트
-cnt=0
-list1=[None,None,None,'a','a']
-for i in range(len(list1)):
-    if list1[i]==None:
-        cnt=cnt+1
-print(cnt)
+
+list1=[['a',None,None,'a','a'],['b',2],['c']]
+print( i for list1[i][0] in range (len(list1)))
+    # if list1[i]==None:
+    #     cnt=cnt+1
+
 
 
 # find idx Lists 테스트
